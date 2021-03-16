@@ -21,6 +21,42 @@
         "scheme": "bearer",
         "bearerFormat": "JWT"
       }
+    },
+    "schemas": {
+      "File": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "modified": {
+            "type": "string"
+          }
+        }
+      },
+      "Image": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "paths": {
@@ -29,7 +65,7 @@
         "tags": [
           "Auth"
         ],
-        "summary": "log in",
+        "summary": "Log in",
         "description": "log in with JWT",
         "requestBody": {
           "required": true,
@@ -77,6 +113,9 @@
           },
           "401": {
             "description": "Not Authorized"
+          },
+          "500": {
+            "description": "Internal error"
           }
         }
       }
@@ -86,7 +125,7 @@
         "tags": [
           "Auth"
         ],
-        "summary": "get restore token",
+        "summary": "Get restore token",
         "description": "Restore password with user email. Server a  send mail to user email with a token to restore password",
         "requestBody": {
           "required": true,
@@ -124,6 +163,9 @@
           },
           "404": {
             "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal error"
           }
         }
       }
@@ -133,7 +175,7 @@
         "tags": [
           "Auth"
         ],
-        "summary": "restore password",
+        "summary": "Restore password",
         "description": "restore password with JWT token for restore password",
         "security": [
           {
@@ -155,6 +197,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "500": {
+            "description": "Internal error"
           }
         }
       }
@@ -164,7 +212,7 @@
         "tags": [
           "Auth"
         ],
-        "summary": "change password",
+        "summary": "Change password",
         "description": "Change password for log in user",
         "security": [
           {
@@ -205,11 +253,376 @@
               }
             }
           },
+          "401": {
+            "description": "Not Authorized"
+          },
           "404": {
-            "description": "resuoruce not found"
+            "description": "Resuoruce not found"
           },
           "500": {
-            "description": "internal error"
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/auth/": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Create new user",
+        "description": "Create new user by admin user, the user password is send to new user's email",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "email",
+                  "name",
+                  "type_user",
+                  "maxsize"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "type_user": {
+                    "type": "string"
+                  },
+                  "maxsize": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "return the new user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type_user": {
+                      "type": "string"
+                    },
+                    "maxsize": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          }
+        }
+      }
+    },
+    "/file/upload": {
+      "post": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Upload file",
+        "description": "Upload new file o update file if the name and path are the same",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "file and path to save",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file",
+                  "url"
+                ],
+                "properties": {
+                  "file": {
+                    "format": "binary"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "meta data of new file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/move": {
+      "post": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Move file",
+        "description": "Change file's path",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "_id",
+                  "name",
+                  "url"
+                ],
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return new user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/files": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Get files",
+        "description": "Get all meta data of user's files",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/File"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          }
+        }
+      }
+    },
+    "/file/remove/{id}": {
+      "delete": {
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Remove file",
+        "description": "Remove file by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return removed file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/download/{id}": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Download file",
+        "description": "Download file by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return removed file",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/images": {
+      "get": {
+        "summary": "Get images",
+        "description": "Get user´s images",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return array of files with their downloads url",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Image"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
