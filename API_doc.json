@@ -568,7 +568,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return removed file",
+            "description": "return file",
             "content": {
               "image/*": {
                 "schema": {
