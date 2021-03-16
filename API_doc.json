@@ -623,6 +623,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not Authorized"
           }
         }
       }
