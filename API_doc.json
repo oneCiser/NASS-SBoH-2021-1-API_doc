@@ -696,7 +696,7 @@
           "Admin"
         ],
         "summary": "Update maxsize",
-        "description": "Update maxsize by id,
+        "description": "Update maxsize by id",
         "parameters": [
           {
             "in": "path",
