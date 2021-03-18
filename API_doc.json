@@ -695,8 +695,8 @@
         "tags": [
           "Admin"
         ],
-        "summary": "Get users",
-        "description": "Get users",
+        "summary": "Update maxsize",
+        "description": "Update maxsize by id,
         "parameters": [
           {
             "in": "path",
