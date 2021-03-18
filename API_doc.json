@@ -695,8 +695,8 @@
         "tags": [
           "Admin"
         ],
-        "summary": "Get users",
-        "description": "Get users",
+        "summary": "change maxsize of user",
+        "description": "change maxsize of user",
         "parameters": [
           {
             "in": "path",
@@ -760,7 +760,7 @@
         ],
         "responses": {
           "200": {
-            "description": "return removed file",
+            "description": "return removed _id",
             "content": {
               "application/json": {
                 "schema": {
