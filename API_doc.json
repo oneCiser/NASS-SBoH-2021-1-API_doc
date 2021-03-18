@@ -23,7 +23,7 @@
       }
     },
     "schemas": {
-      "user": {
+      "User": {
         "type": "object",
         "properties": {
           "_id": {
@@ -39,7 +39,7 @@
             "type": "string"
           },
           "maxsize": {
-            "type": "number"
+            "type": "integer"
           }
         }
       },
@@ -673,7 +673,7 @@
                     "users": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/user"
+                        "$ref": "#/components/schemas/User"
                       }
                     }
                   }
@@ -695,8 +695,8 @@
         "tags": [
           "Admin"
         ],
-        "summary": "change maxsize of user",
-        "description": "change maxsize of user",
+        "summary": "Get users",
+        "description": "Get users",
         "parameters": [
           {
             "in": "path",
@@ -708,20 +708,36 @@
             "description": "id of the user"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "maxsize"
+                ],
+                "properties": {
+                  "maxsize": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "return user",
             "content": {
-              "user/*": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "multipart/form-data": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "type": "object",
+                  "properties": {
+                    "maxsize": {
+                      "type": "integer"
+                    }
+                  }
                 }
               }
             }
@@ -760,11 +776,16 @@
         ],
         "responses": {
           "200": {
-            "description": "return removed _id",
+            "description": "return removed file",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/File"
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
