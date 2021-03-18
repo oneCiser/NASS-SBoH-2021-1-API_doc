@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "NASS-SBoH-2021-01",
-    "description": "end points of NASS-SBoH-2021-01",
+    "description": "This page will only focus on documenting what endpoints does the NASS-SBoH-2021-01 application have, how do they work and finaly what inputs and outputs of the endpoint are.",
     "version": "1.0.0",
     "license": {
       "name": "MIT",
@@ -23,6 +23,26 @@
       }
     },
     "schemas": {
+      "user": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type_user": {
+            "type": "string"
+          },
+          "maxsize": {
+            "type": "number"
+          }
+        }
+      },
       "File": {
         "type": "object",
         "properties": {
@@ -626,6 +646,134 @@
           },
           "401": {
             "description": "Not Authorized"
+          }
+        }
+      }
+    },
+    "/admin/users": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get users",
+        "description": "Get users",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return array of users with their _id, username, name, email, type_user and maxsize",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/user"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/admin/user/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get users",
+        "description": "Get users",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return user",
+            "content": {
+              "user/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server internal error"
+          }
+        }
+      }
+    },
+    "/admin/remove/{id}": {
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Remove user",
+        "description": "Remove user by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "return removed file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server internal error"
           }
         }
       }
