@@ -285,88 +285,6 @@
         }
       }
     },
-    "/auth/": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Create new user",
-        "description": "Create new user by admin user, the user password is send to new user's email",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "username",
-                  "email",
-                  "name",
-                  "type_user",
-                  "maxsize"
-                ],
-                "properties": {
-                  "username": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "type_user": {
-                    "type": "string"
-                  },
-                  "maxsize": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "return the new user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "_id": {
-                      "type": "string"
-                    },
-                    "username": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type_user": {
-                      "type": "string"
-                    },
-                    "maxsize": {
-                      "type": "integer"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Not Authorized"
-          }
-        }
-      }
-    },
     "/file/upload": {
       "post": {
         "tags": [
@@ -795,6 +713,88 @@
           },
           "500": {
             "description": "Server internal error"
+          }
+        }
+      }
+    },
+    "/admin/createuser": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Create new user",
+        "description": "Create new user by admin user, the user password is send to new user's email",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "email",
+                  "name",
+                  "type_user",
+                  "maxsize"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "type_user": {
+                    "type": "string"
+                  },
+                  "maxsize": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "return the new user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type_user": {
+                      "type": "string"
+                    },
+                    "maxsize": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
           }
         }
       }
