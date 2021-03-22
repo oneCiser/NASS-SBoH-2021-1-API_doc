@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://nass.bucaramanga.upb.edu.co/api"
+      "url": "http://nass2.bucaramanga.upb.edu.co/api"
     }
   ],
   "components": {
@@ -564,6 +564,160 @@
           },
           "401": {
             "description": "Not Authorized"
+          }
+        }
+      }
+    },
+    "/file/folder": {
+      "post": {
+        "summary": "Download folder",
+        "description": "Download folder in zip type",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Folder path",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "folder"
+                ],
+                "properties": {
+                  "folder": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Folder in zip format",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "zip"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove folder",
+        "description": "Remove folder and all files in folder",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Folder path",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "folder"
+                ],
+                "properties": {
+                  "folder": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return true of folder removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "removed": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Change folder's name",
+        "description": "Change folder's name and the path of file in the folder",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "The folder to rename",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "oldFolder",
+                  "newFolder"
+                ],
+                "properties": {
+                  "oldFolder": {
+                    "type": "string"
+                  },
+                  "newFolder": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return true is folder's name is changed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "changed": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       }
