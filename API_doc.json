@@ -722,6 +722,160 @@
         }
       }
     },
+    "/file/img/{id}": {
+      "get": {
+        "summary": "Get image",
+        "description": "Get image in base64",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of image"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return file encode in base64",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/share": {
+      "post": {
+        "summary": "Share file",
+        "description": "Share file",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User and permissions to share file",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "id_file",
+                  "write"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "id_file": {
+                    "type": "string"
+                  },
+                  "write": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "True if file was share",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shared": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Unshhare file",
+        "description": "Unshare file",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Unshare file to user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "id_file"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "id_file": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "True if file was share",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unShared": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/users": {
       "get": {
         "tags": [
@@ -768,6 +922,11 @@
           "Admin"
         ],
         "summary": "Update maxsize",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "description": "Update maxsize by id",
         "parameters": [
           {
