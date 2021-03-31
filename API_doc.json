@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://nass.bucaramanga.upb.edu.co/api"
+      "url": "http://nass2.bucaramanga.upb.edu.co/api"
     }
   ],
   "components": {
@@ -568,6 +568,418 @@
         }
       }
     },
+    "/file/folder": {
+      "post": {
+        "summary": "Download folder",
+        "description": "Download folder in zip type",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Folder path",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "folder"
+                ],
+                "properties": {
+                  "folder": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Folder in zip format",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "zip"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove folder",
+        "description": "Remove folder and all files in folder",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Folder path",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "folder"
+                ],
+                "properties": {
+                  "folder": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return true of folder removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "removed": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Change folder's name",
+        "description": "Change folder's name and the path of file in the folder",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "The folder to rename",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "oldFolder",
+                  "newFolder"
+                ],
+                "properties": {
+                  "oldFolder": {
+                    "type": "string"
+                  },
+                  "newFolder": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return true is folder's name is changed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "changed": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/img/{id}": {
+      "get": {
+        "summary": "Get image",
+        "description": "Get image in base64",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of image"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return file encode in base64",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/share": {
+      "post": {
+        "summary": "Share file",
+        "description": "Share file",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User and permissions to share file",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "id_file",
+                  "write"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "id_file": {
+                    "type": "string"
+                  },
+                  "write": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "True if file was share",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shared": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Unshhare file",
+        "description": "Unshare file",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Unshare file to user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "id_file"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "id_file": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "True if file was share",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "unShared": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file/videos": {
+      "get": {
+        "summary": "Get videos",
+        "description": "Get user´s videos",
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return array images's data from id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "modified": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/file/loadvideo/{id}": {
+      "get": {
+        "summary": "Get videos",
+        "description": "Get user´s video data by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "id of file"
+          },
+          {
+            "in": "header",
+            "name": "range",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "<unit>=<range-start>-<range-end>"
+          }
+        ],
+        "tags": [
+          "File"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return array images's data from id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "modified": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
     "/admin/users": {
       "get": {
         "tags": [
@@ -613,8 +1025,13 @@
         "tags": [
           "Admin"
         ],
-        "summary": "Get users",
-        "description": "Get users",
+        "summary": "Update maxsize",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Update maxsize by id",
         "parameters": [
           {
             "in": "path",
